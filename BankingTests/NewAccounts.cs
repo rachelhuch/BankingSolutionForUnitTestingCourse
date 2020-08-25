@@ -13,7 +13,7 @@ namespace BankingTests
         public void NewAccountsHaveCorrectOpeningBalance()
         {
             // WTCYWYH (Write the code you wish you had)
-            // Given
+            // Given I have a brand new account.
             var account = new BankAccount();
 
             // When I get the balance
