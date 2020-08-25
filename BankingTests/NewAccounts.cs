@@ -16,10 +16,10 @@ namespace BankingTests
             // Given
             var account = new BankAccount();
 
-            // When
+            // When I get the balance
             decimal balance = account.GetBalance();
 
-            // Then
+            // Then I should have $1000.00
             Assert.Equal(1000M, balance);
         }
     }
