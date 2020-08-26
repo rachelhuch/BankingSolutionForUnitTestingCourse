@@ -1,4 +1,6 @@
 ﻿using BankingDomain;
+using BankingTests.Fakes;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,48 +10,45 @@ namespace BankingTests
 {
     public class OverdraftingAnAccount
     {
-        /*
-          Our bank does not allow you to overdraft. You can't take out more than 
-        you have. You CAN get to zero, though (it's your money).
-        If you try to overdraft
-            - the balance stays the same
-                -e.g. if you have 500 in your account, and you take out 1000,
-                      you still have 500 in your account (not zero).
-                      And an OverdraftException is thrown.
 
-         */
+
+        BankAccount _account;
+        public OverdraftingAnAccount()
+        {
+            _account = new BankAccount(new Mock<ICalculateBankAccountBonuses>().Object, new Mock<INotifyTheFeds>().Object);
+        }
 
         [Fact]
         public void YouCanTakeAllYourMoney()
         {
-            var account = new BankAccount();
+           
 
-            account.Withdraw(account.GetBalance());
+            _account.Withdraw(_account.GetBalance());
 
-            Assert.Equal(0, account.GetBalance());
+            Assert.Equal(0, _account.GetBalance());
             // this passed immediately. No red. Be sceptical, but it might be good.
         }
 
         [Fact]
         public void OverdraftThrowsAnException()
         {
-            var account = new BankAccount();
-            var originalBalance = account.GetBalance();
+            
+            var originalBalance = _account.GetBalance();
 
             Assert.Throws<OverdraftException>(() => 
-            account.Withdraw(originalBalance + .01M));
+            _account.Withdraw(originalBalance + .01M));
 
         }
 
         [Fact]
         public void OverdraftDoesNotDecreaseBalance()
         {
-            var account = new BankAccount();
-            var originalBalance = account.GetBalance();
+           
+            var originalBalance = _account.GetBalance();
 
             try
             {
-                account.Withdraw(originalBalance + .01M);
+                _account.Withdraw(originalBalance + .01M);
             }
             catch (OverdraftException)
             {
@@ -57,7 +56,7 @@ namespace BankingTests
                 // Gulp!
             }
 
-            Assert.Equal(originalBalance, account.GetBalance());
+            Assert.Equal(originalBalance, _account.GetBalance());
         }
 
     }

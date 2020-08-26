@@ -1,4 +1,6 @@
 ﻿using BankingDomain;
+using BankingTests.Fakes;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,7 +13,7 @@ namespace BankingTests
         [Fact]
         public void MakingAWithdrawalDecreasesBalance()
         {
-            var account = new BankAccount();
+            var account = new BankAccount(new DummyBonusCalculator(), new Mock<INotifyTheFeds>().Object);
             var openingBalance = account.GetBalance();
             var amountToWithdraw = 1M;
 
@@ -23,7 +25,7 @@ namespace BankingTests
         [Fact]
         public void NegativeAmountsWithdrawnDoNotAffectBalance()
         {
-            var account = new BankAccount();
+            var account = new BankAccount(new DummyBonusCalculator(), new Mock<INotifyTheFeds>().Object);
             var openingBalance = account.GetBalance();
 
             try
@@ -43,7 +45,7 @@ namespace BankingTests
         public void NegativeAmountsThrowAnException()
         {
 
-            var account = new BankAccount();
+            var account = new BankAccount(new DummyBonusCalculator(), new Mock<INotifyTheFeds>().Object);
 
             Assert.Throws<ImproperTransactionException>(() =>
             {
