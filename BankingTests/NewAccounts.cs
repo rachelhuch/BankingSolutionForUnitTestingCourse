@@ -22,5 +22,13 @@ namespace BankingTests
             // Then I should have $1000.00
             Assert.Equal(1000M, balance);
         }
+
+        [Fact]
+        public void NewAccountsAreStandardAccountsByDefault()
+        {
+            var account = new BankAccount();
+
+            Assert.Equal(AccountType.Standard, account.Type);
+        }
     }
 }
